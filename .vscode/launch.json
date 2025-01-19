@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "tarsier_mysql_storage",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "Dart (example\\main.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "example\\main.dart"
+        },
+        {
+            "name": "Flutter (lib\\main.dart)",
+            "type": "dart",
+            "request": "launch",
+            "cwd": "example\\flutter_example",
+            "program": "lib\\main.dart"
+        }
+    ]
+}
