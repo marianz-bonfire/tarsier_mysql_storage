@@ -1,6 +1,6 @@
 name: tarsier_mysql_storage
 description: A simple and flexible library for managing MySQL databases in Dart and Flutter applications.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/marianz-bonfire/tarsier_mysql_storage
 repository: https://github.com/marianz-bonfire/tarsier_mysql_storage
 issue_tracker: https://github.com/marianz-bonfire/tarsier_mysql_storage/issues
