@@ -98,7 +98,7 @@ abstract class BaseTable<T extends BaseTableModel> {
 
   /// Retrieves a single row by a specific column value.
   ///
-  /// - [whereConditions]: The where clause in Map<String, dynamic> form.
+  /// - [whereConditions]: The where clause in Map form.
   ///
   /// Returns the matching model object or `null` if no match is found.
   Future<T?> get(Map<String, dynamic> whereConditions) async {

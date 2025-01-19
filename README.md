@@ -59,6 +59,8 @@ flutter pub get
 
 ## 📒 Usage
 - ### Define a Model
+  💡Using this package is similar with [tarsier_local_storage](https://pub.dev/packages/tarsier_local_storage) package.
+
 Create a class that extends `BaseTableModel` to represent a database entity:
 ```dart
 import 'package:tarsier_mysql_storage/tarsier_mysql_storage.dart';

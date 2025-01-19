@@ -1,3 +1,7 @@
+## 1.0.0+1
+
+- Fixed issue on `Pass static analysis` report
+
 ## 1.0.0
 
 - Initial release of `tarsier_mysql_storage`.
