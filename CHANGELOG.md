@@ -1,3 +1,9 @@
+## 1.0.2
+
+- Added `backup` and `restore` database functionality
+- Updated `README` to add more details about the enhancement
+- Fixed some minot bugs
+
 ## 1.0.1
 
 - Fixed issue on `Pass static analysis` report

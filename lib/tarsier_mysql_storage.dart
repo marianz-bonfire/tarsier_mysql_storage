@@ -1,5 +1,3 @@
-/// # Tarsier MySQL Storage
-///
 /// A Dart and Flutter compatible package for seamless MySQL database integration.
 ///
 /// This package simplifies database management by providing:

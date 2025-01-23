@@ -49,7 +49,7 @@ A simple and flexible library for managing MySQL databases (*using mysql_client 
 Add the package to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  tarsier_mysql_storage: ^1.0.1
+  tarsier_mysql_storage: ^1.0.2
 ```
 Run the following command:
 ```bash
@@ -150,7 +150,7 @@ void main() async {
   final userTable = UserTable();
   // Insert a user
   final userId = await userTable.createObject(
-    User(id: 0, name: 'John Doe', email: 'john@gmail.com', createdAt: DateTime.now()),
+    User(name: 'John Doe', email: 'john@gmail.com', createdAt: DateTime.now()),
   );
   print('Inserted user with ID: $userId');
 
@@ -162,7 +162,8 @@ void main() async {
 
   // Update a user
   await userTable.updateObject(
-      1, User(id: 1, name: 'Sam Doe', email: 'sam@gmail.com', createdAt: DateTime.now())
+      userId.toInt(), // id to be updated
+      User(name: 'Sam Doe', email: 'sam@gmail.com', createdAt: DateTime.now()),
   );
 
   // Check if a user exists
@@ -170,6 +171,55 @@ void main() async {
   print('User exists: $exists');
 }
 ```
+NOTE: Above code uses `createObject` and `updateObject` that inserts a model object into the database. But there is an alternative way on inserting/updating data using a raw map of data into the database.
+<details>
+  <summary> Key Differences Between `createObject` and `create`, `updateObject` and `update`.</summary>
+  
+| **Function**         | **Purpose**                                                                                   | **When to Use**                                                                                     |
+|-----------------------|-----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| `createObject`        | Inserts a model object into the database.                                                    | Use when working with strongly typed model classes.                                                |
+| `create`              | Inserts a raw map of data into the database.                                                 | Use when working with dynamic or non-typed data, or when data comes directly from an API or user.   |
+| `updateObject`        | Updates a database row using a model object.                                                 | Use when you have a complete, strongly typed object with the updated data.                         |
+| `update`              | Updates a database row using a raw map.                                                      | Use when you have dynamic or partial data, or don't want to rely on model objects.                 |
+
+</details>
+
+- ### Backup the Database
+The `backup` function saves the current database structure and data to a `.sql` file. You can optionally include database-level commands like `DROP DATABASE`, `CREATE DATABASE`, and `USE`.
+
+Additionally, the `onProgress` callback provides updates about the current step, total steps, and a message describing the ongoing process.
+
+```dart
+  final storage = TarsierMySQLStorage();
+
+  await storage.backup(
+    'backup.sql',
+    includeDatabaseStructure: true, // Include database DROP, CREATE, and USE commands
+    onProgress: (currentStep, totalSteps, message) {
+      final percentage = (currentStep / totalSteps * 100).toStringAsFixed(1);
+      print('$message ($currentStep / $totalSteps, $percentage%)');
+    },
+  );
+```
+
+- ### Restore the Database
+The `restore` function restores a previously backed-up database from a `.sql` file. The `onProgress` callback provides updates about the current step, total steps, and the statement being executed.
+
+```dart
+  final storage = TarsierMySQLStorage();
+
+  await storage.restore(
+    'backup.sql',
+    onProgress: (currentStep, totalSteps, message) {
+      final percentage = (currentStep / totalSteps * 100).toStringAsFixed(1);
+      print('$message ($currentStep / $totalSteps, $percentage%)');
+    },
+  );
+```
+On backup and restore operations with `onProgress` callback has its benefits;
+  - `Real-Time Feedback`: Keeps the user informed about the progress of long-running operations.
+  - `Error Localization`: If an error occurs during the operation, the progress updates make it easier to identify the problematic step or SQL statement.
+  - `Enhanced User Experience`: Ideal for integrating with a UI (e.g., showing progress bars or logs in a Flutter app).
 
 ## 📸 Example Screenshots
 

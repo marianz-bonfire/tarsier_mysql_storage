@@ -64,29 +64,6 @@ abstract class BaseTable<T extends BaseTableModel> {
     await db.execute(createTableSQL);
   }
 
-  /// Inserts a model object into the database.
-  ///
-  /// - [data]: The model object to be inserted.
-  ///
-  /// Returns the ID of the inserted row.
-  Future<BigInt> createObject(T data) async {
-    return await create(toMap(data));
-  }
-
-  /// Inserts a map of data into the database.
-  ///
-  /// - [data]: A map representing the row to be inserted.
-  ///
-  /// Returns the ID of the inserted row.
-  Future<BigInt> create(Map<String, dynamic> data) async {
-    final db = await getDatabase();
-    var result = await db!.execute(
-      QueryGenerator.generateInsertQuery(tableName, data),
-      data,
-    );
-    return result.lastInsertID;
-  }
-
   /// Retrieves all rows from the table.
   ///
   /// Returns a list of model objects.
@@ -113,6 +90,29 @@ abstract class BaseTable<T extends BaseTableModel> {
     return null;
   }
 
+  /// Inserts a model object into the database.
+  ///
+  /// - [data]: The model object to be inserted.
+  ///
+  /// Returns the ID of the inserted row.
+  Future<BigInt> createObject(T data) async {
+    return await create(toMap(data));
+  }
+
+  /// Inserts a map of data into the database.
+  ///
+  /// - [data]: A map representing the row to be inserted.
+  ///
+  /// Returns the ID of the inserted row.
+  Future<BigInt> create(Map<String, dynamic> data) async {
+    final db = await getDatabase();
+    var result = await db!.execute(
+      QueryGenerator.generateInsertQuery(tableName, data),
+      data,
+    );
+    return result.lastInsertID;
+  }
+
   /// Updates a row with a new model object.
   ///
   /// - [id]: The ID of the row to update.
@@ -130,6 +130,11 @@ abstract class BaseTable<T extends BaseTableModel> {
   ///
   /// Returns the number of rows affected.
   Future<BigInt> update(int id, Map<String, dynamic> data) async {
+    // Ensure 'id' key is present in the data map
+    if (!data.containsKey('id') || (int.parse(data['id'] ?? '0') < 1)) {
+      data['id'] = id;
+    }
+
     final db = await getDatabase();
     var result = await db!.execute(
       QueryGenerator.generateUpdateQuery(tableName, data, "id"),

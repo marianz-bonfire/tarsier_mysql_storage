@@ -13,40 +13,58 @@ Future<void> main() async {
     tables: [
       UserTable(),
       RoleTable(),
+      // Add more table class that extends BaseTable
     ],
   );
-  // Ensure the table exists
-  //await userTable.createTable(db);
 
   final userTable = UserTable();
+
   // Insert a user
   final userId = await userTable.createObject(
-    User(
-        id: 0,
-        name: 'John Doe',
-        email: 'john@gmail.com',
-        createdAt: DateTime.now()),
+    User(name: 'John Doe', email: 'john@gmail.com', createdAt: DateTime.now()),
   );
   print('Inserted user with ID: $userId');
 
   // Fetch all users
   final users = await userTable.all();
   for (var user in users) {
-    print('User: ${user.name}, Password: ${user.email}');
+    print('User: ${user.id}, ${user.name}, Password: ${user.email}');
   }
 
   // Update a user
   await userTable.updateObject(
-      1,
-      User(
-          id: 1,
-          name: 'Sam Doe',
-          email: 'sam@gmail.com',
-          createdAt: DateTime.now()));
+    userId.toInt(),
+    User(name: 'Sam Doe', email: 'sam@gmail.com', createdAt: DateTime.now()),
+  );
 
   // Check if a user exists
-  final exists = await userTable.exists({'username': 'Juan Dela Cruz'});
+  final exists = await userTable.exists({'name': 'Juan Dela Cruz'});
   print('User exists: $exists');
+
+  final storage = TarsierMySQLStorage();
+
+  // Backup the database to a file
+  await storage.backup(
+    'backup.sql',
+    onProgress: (currentStep, totalSteps, message) {
+      final percentage = (currentStep / totalSteps * 100).toStringAsFixed(1);
+      print('$message ($currentStep / $totalSteps, $percentage%)');
+    },
+  );
+
+  // Restore .sql file into database
+  await storage.restore(
+    'backup.sql',
+    onProgress: (currentStep, totalSteps, message) {
+      final percentage = (currentStep / totalSteps * 100).toStringAsFixed(1);
+      print('$message ($currentStep / $totalSteps, $percentage%)');
+    },
+  );
+
+  final userss = await userTable.all();
+  for (var user in userss) {
+    print('User: ${user.id}, ${user.name}, Password: ${user.email}');
+  }
 }
 
 class UserTable extends BaseTable<User> {
@@ -84,7 +102,7 @@ class User extends BaseTableModel {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'] as int?,
+      id: int.parse(map['id']),
       name: map['name'] as String,
       email: map['email'] as String,
       createdAt: DateTime.parse(map['created_at'] as String),
