@@ -1,3 +1,9 @@
+## 1.0.3
+- Updated dependency versions to latest stable releases
+- Improved Dart 3 analysis and linting configuration
+- Bumped compatibility with all Dart 3.x SDKs
+
+
 ## 1.0.2
 
 - Added `backup` and `restore` database functionality

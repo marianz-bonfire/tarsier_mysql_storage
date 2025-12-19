@@ -49,7 +49,7 @@ A simple and flexible library for managing MySQL databases (*using mysql_client 
 Add the package to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  tarsier_mysql_storage: ^1.0.2
+  tarsier_mysql_storage: ^1.0.3
 ```
 Run the following command:
 ```bash
